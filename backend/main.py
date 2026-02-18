@@ -30,7 +30,7 @@ def startup():
 
 @app.get("/")
 def health():
-    return {"status": "DevLens Backend Running"}
+    return {"status": "Devlyzer Backend Running"}
 
 @app.get("/test-db")
 def test_db():

@@ -6,7 +6,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-950 text-gray-200">
       <h1 className="text-5xl font-semibold mb-6">
-        DevLens AI
+        Devlyzer AI
       </h1>
       <p className="text-gray-400 mb-8 text-center max-w-lg">
         AI-powered developer intelligence engine. Analyze technical depth, consistency, and readiness in seconds.

@@ -20,7 +20,7 @@ def query_llm(prompt: str):
 
 def generate_chat_response(evaluation_data, user_message):
     prompt = f"""
-You are DevLens AI.
+You are Devlyzer AI.
 
 STRICT RULES:
 - Never ask follow-up questions unless explicitly requested.
