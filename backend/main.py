@@ -202,18 +202,29 @@ def devlens_evaluate(github: str, leetcode: str):
 
     # ---------------- Return to Frontend ----------------
     return {
-        "github_username": github,
-        "leetcode_username": leetcode,
-        "engineering_score": engineering_score,
-        "dsa_score": dsa_score,
-        "consistency_score": consistency_score,
-        "collaboration_score": collaboration_score,
-        "final_score": final["final_score"],
-        "category": final["category"],
-        "leetcode_breakdown": leetcode_breakdown,
-        "repositories": repositories,
-        "skills": skills
-    }
+    "github_username": github,
+    "leetcode_username": leetcode,
+
+    "engineering_score": engineering_score,
+    "engineering_features": eng_features,
+
+    "dsa_score": dsa_score,
+    "dsa_features": dsa_data,
+
+    "consistency_score": consistency_score,
+    "consistency_features": consistency_data,
+
+    "collaboration_score": collaboration_score,
+    "collaboration_features": collab_data,
+
+    "final_score": final["final_score"],
+    "category": final["category"],
+
+    "leetcode_breakdown": leetcode_breakdown,
+    "repositories": repositories,
+    "skills": skills
+}
+
 
 
 
