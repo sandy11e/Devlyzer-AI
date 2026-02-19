@@ -228,7 +228,7 @@ function Message({ role, text, ts, idx }) {
           : "linear-gradient(135deg,rgba(0,245,196,0.15),rgba(0,245,196,0.05))",
         border:`1px solid ${isUser ? "rgba(123,97,255,0.3)" : "rgba(0,245,196,0.25)"}`,
         display:"flex", alignItems:"center", justifyContent:"center",
-        fontSize:14, flexShrink:0,
+        fontSize:14,
       }}>
         {isUser ? "◈" : "⬡"}
       </div>
@@ -608,7 +608,7 @@ export default function Chat() {
                   display:"flex", alignItems:"center", justifyContent:"center",
                   transition:"all 0.2s",
                   boxShadow: message.trim() && !loading ? "0 4px 16px var(--glow)" : "none",
-                  flexShrink:0,
+                  
                 }}
                 onMouseEnter={e => { if(message.trim()&&!loading) e.currentTarget.style.transform="scale(1.08)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform="scale(1)"; }}

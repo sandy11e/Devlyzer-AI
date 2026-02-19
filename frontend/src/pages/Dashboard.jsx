@@ -315,6 +315,17 @@ export default function Dashboard() {
   const navigate = useNavigate();
   useCSS();
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("devlensData");
+      if (saved) {
+        const obj = JSON.parse(saved);
+        setData(obj);
+        if (obj.github_username) setGithub(obj.github_username);
+        if (obj.leetcode_username) setLeetcode(obj.leetcode_username);
+      }
+    } catch (e) { /* ignore parse errors */ }
+  }, []);
   const run = async () => {
     if (!github || !leetcode) return;
     try {
