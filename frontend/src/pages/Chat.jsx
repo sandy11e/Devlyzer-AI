@@ -429,7 +429,7 @@ export default function Chat() {
 
         <div style={{ display:"flex", gap:10, alignItems:"center" }}>
           <Tag color="em"><Dot size={5} pulse />&nbsp;AI online</Tag>
-          <a href="/dashboard" style={{
+          <a href="/dashboard" onClick={() => sessionStorage.setItem('fromChat', 'true')} style={{
             background:"transparent", border:"1px solid var(--border)",
             borderRadius:7, padding:"7px 16px",
             color:"var(--mid)", fontSize:12, fontWeight:500,

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip,
   BarChart, Bar, XAxis, YAxis, Cell, ResponsiveContainer,
@@ -322,18 +322,27 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
   useCSS();
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("devlensData");
-      if (saved) {
-        const obj = JSON.parse(saved);
-        setData(obj);
-        if (obj.github_username) setGithub(obj.github_username);
-        if (obj.leetcode_username) setLeetcode(obj.leetcode_username);
-      }
-    } catch (e) { /* ignore parse errors */ }
+    // Only restore from localStorage if coming from Chat page
+    // Don't restore if coming from Landing page (initial load)
+    const fromChat = location.state?.from === 'chat' || sessionStorage.getItem('fromChat');
+    
+    if (fromChat) {
+      try {
+        const saved = localStorage.getItem("devlensData");
+        if (saved) {
+          const obj = JSON.parse(saved);
+          setData(obj);
+          setCurrentAnalysis(obj);
+          if (obj.github_username) setGithub(obj.github_username);
+          if (obj.leetcode_username) setLeetcode(obj.leetcode_username);
+        }
+      } catch (e) { /* ignore parse errors */ }
+      sessionStorage.removeItem('fromChat');
+    }
   }, []);
 
   const featureDescriptions = {
@@ -1146,11 +1155,12 @@ export default function Dashboard() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                           {(data?.recommendations && data.recommendations.length) ? (
                             data.recommendations.map((r, idx) => {
-                              const [expanded, setExpanded] = useState(false);
+                              const key = `rec-${r.id || idx}`;
+                              const isExpanded = showDesc[key];
                               return (
                                 <div key={r.id || idx} style={{ borderLeft: `3px solid ${r.severity === 'high' ? 'var(--em3)' : r.severity === 'medium' ? 'var(--em4)' : 'var(--em2)'}`, padding: "12px 14px", background: 'rgba(0,0,0,0.2)', borderRadius: 6 }}>
                                   <button 
-                                    onClick={() => setExpanded(!expanded)}
+                                    onClick={() => toggleDesc(key)}
                                     style={{
                                       display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', 
                                       background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', padding: 0
@@ -1164,9 +1174,9 @@ export default function Dashboard() {
                                       </div>
                                       <div style={{ fontFamily: "'Fira Code'", fontSize: 11, color: 'var(--mid)', lineHeight: 1.5 }}>{r.text}</div>
                                     </div>
-                                    <span style={{ marginLeft: 12, fontSize: 12, color: 'var(--em)', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
+                                    <span style={{ marginLeft: 12, fontSize: 12, color: 'var(--em)', transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
                                   </button>
-                                  {expanded && r.steps && r.steps.length > 0 && (
+                                  {isExpanded && r.steps && r.steps.length > 0 && (
                                     <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                                       <div style={{ fontFamily: "'Fira Code'", fontSize: 11, color: 'var(--dim)', marginBottom: 8, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.4 }}>Actionable Steps</div>
                                       <ol style={{ margin: 0, paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
