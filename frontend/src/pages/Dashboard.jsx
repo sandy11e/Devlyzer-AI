@@ -1151,7 +1151,7 @@ export default function Dashboard() {
                   {/* Recommendations */}
                   <div style={{ marginTop: 12 }}>
                     <Panel style={{ padding: 14 }}>
-                      <div style={{ fontFamily: "'Fira Code'", fontSize: 12, color: "var(--dim)", marginBottom: 8 }}>📋 Recommendations</div>
+                      <div style={{ fontFamily: "'Fira Code'", fontSize: 12, color: "var(--dim)", marginBottom: 8 }}>//Recommendations</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                           {(data?.recommendations && data.recommendations.length) ? (
                             data.recommendations.map((r, idx) => {
