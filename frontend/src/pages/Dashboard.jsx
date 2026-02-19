@@ -553,8 +553,8 @@ export default function Dashboard() {
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 {[
-                  { label: "GitHub",       sub: "engineering",  val: data.engineering_score,   color: "#00f5c4" },
-                  { label: "DSA",          sub: "algorithms",   val: data.dsa_score,           color: "#7b61ff" },
+                  { label: "Engineering",       sub: "GitHub",  val: data.engineering_score,   color: "#00f5c4" },
+                  { label: "DSA",          sub: "LeetCode",   val: data.dsa_score,           color: "#7b61ff" },
                   { label: "Consistency",  sub: "activity",     val: data.consistency_score,   color: "#ff6b6b" },
                   { label: "Collab",       sub: "teamwork",     val: data.collaboration_score, color: "#ffd166" },
                 ].map((s, i) => (

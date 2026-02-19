@@ -409,7 +409,6 @@ export default function Landing() {
             <span style={{
               background: "linear-gradient(135deg, var(--em) 0%, #4adecc 50%, var(--em2) 100%)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              animation: "glitch 6s ease infinite",
               display: "inline-block",
             }}>
               not just the resume.
