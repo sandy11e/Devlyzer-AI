@@ -11,6 +11,7 @@ from services.scoring_engine import calculate_final_readiness
 from database import get_db
 from datetime import datetime
 from services.llm_service import generate_chat_response
+from services.recommender import generate_recommendations
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -184,7 +185,39 @@ def devlens_evaluate(github: str, leetcode: str):
         "hard": leetcode_data.get("hard", 0)
     }
 
-    # ---------------- Store in DB ----------------
+    # ---------------- Build response ----------------
+    response_payload = {
+        "github_username": github,
+        "leetcode_username": leetcode,
+
+        "engineering_score": engineering_score,
+        "engineering_features": eng_features,
+
+        "dsa_score": dsa_score,
+        "dsa_features": dsa_data,
+
+        "consistency_score": consistency_score,
+        "consistency_features": consistency_data,
+
+        "collaboration_score": collaboration_score,
+        "collaboration_features": collab_data,
+
+        "final_score": final["final_score"],
+        "category": final["category"],
+
+        "leetcode_breakdown": leetcode_breakdown,
+        "repositories": repositories,
+        "skills": skills,
+    }
+
+    # ---------------- Recommendations ----------------
+    try:
+        recs = generate_recommendations(response_payload)
+        response_payload["recommendations"] = recs
+    except Exception as e:
+        response_payload["recommendations"] = []
+
+    # ---------------- Store in DB (include recommendations) ----------------
     result_document = {
         "github_username": github,
         "leetcode_username": leetcode,
@@ -194,36 +227,14 @@ def devlens_evaluate(github: str, leetcode: str):
         "collaboration_score": collaboration_score,
         "final_score": final["final_score"],
         "category": final["category"],
+        "recommendations": response_payload.get("recommendations", []),
         "created_at": datetime.utcnow()
     }
 
     db = get_db()
     db.evaluations.insert_one(result_document)
 
-    # ---------------- Return to Frontend ----------------
-    return {
-    "github_username": github,
-    "leetcode_username": leetcode,
-
-    "engineering_score": engineering_score,
-    "engineering_features": eng_features,
-
-    "dsa_score": dsa_score,
-    "dsa_features": dsa_data,
-
-    "consistency_score": consistency_score,
-    "consistency_features": consistency_data,
-
-    "collaboration_score": collaboration_score,
-    "collaboration_features": collab_data,
-
-    "final_score": final["final_score"],
-    "category": final["category"],
-
-    "leetcode_breakdown": leetcode_breakdown,
-    "repositories": repositories,
-    "skills": skills
-}
+    return response_payload
 
 
 
